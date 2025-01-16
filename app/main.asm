@@ -81,6 +81,20 @@ StopWDT     mov.w   #WDTPW+WDTHOLD,&WDTCTL  ; Stop WDT
 SetupP1     bic.b   #BIT0,&P1OUT            ; Clear P1.0 output
             bis.b   #BIT0,&P1DIR            ; P1.0 output
 
+SetupP2     bic.b   #BIT6,&P6OUT            ; Clear P6.6 output
+            bis.b   #BIT6,&P6DIR            ; P6.6 output
+            bic.w   #LOCKLPM5,&PM5CTL0      ; Unlock I/O pins
+
+SetupTB0    bis.w   #TBCLR,&TB0CTL
+            bis.w   #TBSSEL__ACLK,&TB0CTL
+            bis.w   #MC__UP,&TB0CTL
+
+            mov.w   #32768,&TB0CCR0
+            bis.w   #CCIE,&TB0CCTL0
+            bic.w   #CCIFG,&TB0CCTL0
+            NOP
+            bis.w   #GIE,SR
+            NOP
 
 ; -- Toggle LED1 with delay loop
 Mainloop    xor.b   #BIT0,&P1OUT            ; Toggle P1.0 every 0.1s
@@ -102,6 +116,14 @@ L1          dec.w   R15                     ; Decrement R15
             jnz     Wait
             ret 
 
+;-------------------------------------------------------------------------------
+; Interrupt Service Routines
+;-------------------------------------------------------------------------------
+ISR_TB0_CCR0:
+            xor.b   #BIT6,&P6OUT
+            bic.w   #CCIFG,&TB0CCTL0
+            reti
+
 
 ;------------------------------------------------------------------------------
 ;           Interrupt Vectors
@@ -109,4 +131,6 @@ L1          dec.w   R15                     ; Decrement R15
             .sect   RESET_VECTOR            ; MSP430 RESET Vector
             .short  RESET                   ;
 
-
+            .sect   TIMER0_B0_VECTOR
+            .short  ISR_TB0_CCR0
+            .end

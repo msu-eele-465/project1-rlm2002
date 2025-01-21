@@ -89,7 +89,7 @@ SetupTB0    bis.w   #TBCLR,&TB0CTL
             bis.w   #TBSSEL__ACLK,&TB0CTL
             bis.w   #MC__UP,&TB0CTL
 
-            mov.w   #32768,&TB0CCR0
+            mov.w   #32900,&TB0CCR0
             bis.w   #CCIE,&TB0CCTL0
             bic.w   #CCIFG,&TB0CCTL0
             NOP
@@ -107,13 +107,15 @@ Mainloop    xor.b   #BIT0,&P1OUT            ; Toggle P1.0 every 0.1s
 ;-------------------------------------------------------------------------------
 Delay_1s:
             mov.w   #10, R14                ; "Multiplier"
-Wait        mov.w   #45000,R15              ; Delay to R15
+Wait        mov.w   #35150,R15              ; Delay to R15
 
 
 L1          dec.w   R15                     ; Decrement R15
             jnz     L1                      ; Delay over?
+            NOP
             dec.w   R14
             jnz     Wait
+            NOP
             ret 
 
 ;-------------------------------------------------------------------------------

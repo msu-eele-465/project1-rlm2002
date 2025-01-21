@@ -10,12 +10,12 @@ Below is a flowchart showing a high level implementation of the delay loop as we
 ![flowchart of delay loop and interrupt](/docs/assets/flowchart.svg)
 
 ## Delay Loop
-The delay loop's inner value (R15) was initially 50000, and was lowered to 45000 as the resulting flash was visibly longer than one second. This value was later changed to 35150 to be closer to one second. The end result is approximately 1s per flash, according to the AD2 oscilloscope.
+The delay loop's inner value (R15) was initially 50000, and was lowered to 45000 as the resulting flash was visibly longer than one second. This value was later changed to 35150 to be closer to one second. The end result is approximately 1s per flash, according to the AD2 oscilloscope, close to .5 Hz.
 
 ![LED1 oscilloscope reading](/docs/assets/LED1_oscilloscope.png)
     
 ## Interrupt
-The interrupt uses CCR0, initially set to 32768, with the flash appearing to be close to one second. This value was later changed to 32875 to be closer to one second. The end result is approximately 1s per flash, according to the AD2 oscilloscope.
+The interrupt uses CCR0, initially set to 32768, with the flash appearing to be close to one second. This value was later changed to 32875 to be closer to one second. The end result is approximately 1s per flash, according to the AD2 oscilloscope, again close to .5 Hz.
 
 ![LED2 oscilloscope reading](/docs/assets/LED2_oscilloscope.png)
 
